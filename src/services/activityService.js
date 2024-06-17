@@ -23,16 +23,10 @@ const removePost = async(id, userId) => {
 }
 
 const getList = async() => {
-    /* const activities = await activityRepo.getList();
-    return activities; */
-    
     return await activityRepo.getList();
 }
 
 const getListByTags = async(tags) => {
-    /* const activity = await activityRepo.getListByTags(tags);
-    return activity; */
-
     return await activityRepo.getListByTags(tags);
 }
 
@@ -58,25 +52,8 @@ const removeComments = async(id, commentId, userId) => {
     return true;
 }
 
-const getListComments = async(id) => {
-    return await activityRepo.getListComments(id);
-}
-
-/************************************************ */
-
-
-
-const addCategories = async (content) => {
-    return await activityRepo.addCategories(content);
-}
-const likeNumbers= async (id, userId) => {
-    const activity = await activityRepo.like(id, userId);
-    return checkActivity(activity);
-}
-
-const updateCategories = async (id, content) => {
-    const activity = await activityRepo.updateCategories(id, content, userId, isAdmin);
-    return checkActivity(activity);
+const getCommentsByPostId = async(id) => {
+    return await activityRepo.getCommentsByPostId(id);
 }
 
 const checkActivity = (activity) => {
@@ -88,6 +65,19 @@ const checkActivity = (activity) => {
     return activity.toJSON({ versionKey: false });
 }
 
+/************************************************ */
+
+
+
+const likeNumbers= async (id, userId) => {
+    const activity = await activityRepo.like(id, userId);
+    return checkActivity(activity);
+}
+
+
+
+
+
 export default {
     addPost,
     updatePost,
@@ -98,15 +88,10 @@ export default {
     addComment,
     updateComments,
     removeComments,
-    getListComments, 
+    getCommentsByPostId, 
 
 
 
 
-    addCategories,       
-    likeNumbers,       
-    updateCategories,
-    
-    
-    
+    likeNumbers,    
 }
