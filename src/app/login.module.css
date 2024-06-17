@@ -1,0 +1,126 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginButton {
+    padding: 0.75rem 1.5rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s;
+}
+
+.loginButton:hover {
+    background-color: #2563eb;
+}
+
+.formContainer {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.title {
+    font-size: 1.5rem;
+    font-weight: lighter;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: black;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.submitButton,
+.cancelButton {
+    width: 48%;
+    padding: 0.5rem;
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s;
+}
+
+.submitButton {
+    background-color: #10b981;
+}
+
+.submitButton:hover {
+    background-color: #059669;
+}
+
+.cancelButton {
+    background-color: #ef4444;
+}
+
+.cancelButton:hover {
+    background-color: #dc2626;
+}
+
+.error {
+    color: #e11d48;
+    font-size: 0.875rem;
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+
+.message {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 700px) {
+    .formContainer {
+        max-width: 90%;
+    }
+
+    .buttonGroup {
+        flex-direction: column;
+    }
+
+    .submitButton,
+    .cancelButton {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
