@@ -64,7 +64,7 @@ const setup = app => {
     /********** COMMENTI **********/
     app.post('/posts/:id/comments', checkAuthorizationMiddleware, addCommentValidator, addComment); //aggiungere commenti
     app.patch('/posts/:id/comments/:commentId', checkAuthorizationMiddleware, updateValidator, updateComments); //aggiorna i commenti
-    //app.delete('/posts/:id/comments/:commentId', checkAuthorizationMiddleware, idCommentValidator, removeComments); //cancellazione commenti
+    app.delete('/posts/:id/comments/:commentId', checkAuthorizationMiddleware, idCommentValidator, removeComments); //cancellazione commenti
     //app.get('/posts/:id/comments', idParamValidator, getListComments); //recuperare lista commenti
     
     app.use((err, req, res, next) => {
