@@ -29,62 +29,64 @@ const getListByTags = async (tags) => {
     });
 }
 
-const getPost = async (id, userId) => { 
-    return await activitySchema.findOne({_id: id});
+const getPost = async (id, userId) => {
+    return await activitySchema.findOne({ _id: id });
 }
 
-const addComment = async(id, content) => {
-    const post = await activitySchema.findById({_id: id}); // Recupera il documento post
+const addComment = async (id, content) => {
+    const post = await activitySchema.findById({ _id: id }); // Recupera il documento post
     if (!post) {
-      throw new Error('Post non trovato');
+        throw new Error('Post non trovato');
     }
-  
+
     const comment = new commentSchema({
-      description: content.description,
-      userId: content.userId,
-      createdAt: Date.now(),
-      updatedAt: Date.now()
+        description: content.description,
+        userId: content.userId,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
     });
 
     //console.log(comment)
 
     await comment.save(); // Salva il documento commento
-  
+
     post.comments.push(comment._id); // Aggiungi l'ID commento all'array comments del post
     await post.save(); // Salva il documento post aggiornato
-  
-    return comment; // Restituisci il commento creato (facoltativo)
-  }
 
-  const updateComments = async (commentId, content) => {
+    return comment; // Restituisci il commento creato (facoltativo)
+}
+
+const updateComments = async (commentId, content) => {
     /*if (content.dueDate) {
         content.dueDate = new Date(content.dueDate * 1000);
     }*/
     return await commentSchema.findOneAndUpdate({ _id: commentId, userId: content.userId }, content, { new: true });
 }
 
-  const removeComments = async(id, commentId, userId) => {
+const removeComments = async (id, commentId, userId) => {
 
-    const comment = await commentSchema.findById({_id: commentId}); // Recupera il documento post
-    
+    const comment = await commentSchema.findOne({ _id: commentId }); // Recupera il documento comment
+
     if (!comment) {
-      throw new Error('Commento non trovato');
+        throw new Error('Commento non trovato');
     }
-    
+
     const commentUserId = comment.userId;
 
     // Verifica l'autorizzazione all'eliminazione del commento
-    if (userId == commentUserId) {
+    if (userId === commentUserId) {
         throw new Error('Non sei autorizzato a eliminare questo commento');
     }
 
     // Eliminazione del commento dalla collezione posts
-    const post = await activitySchema.findById({_id: id});
+    const post = await activitySchema.findOne({ _id: id });  // Recupera il documento post
+
     if (!post) {
         throw new Error('Post non trovato');
     }
 
-    const commentIndex = post.comments.indexOf(commentId); // Trova l'indice del commento
+    const commentIndex = post.comments.indexOf(commentId); // Trova l'indice del commento all'interno dell'array
+
     if (commentIndex === -1) {
         throw new Error('Commento non trovato per questo post');
     }
@@ -94,30 +96,34 @@ const addComment = async(id, content) => {
     await post.save(); // Salva il post aggiornato
 
     // Elimina il documento del commento
-    await commentSchema.findByIdAndDelete({_id: commentId}); // Elimina il documento commento
+    const commentDeleted = await commentSchema.findOneAndDelete({ _id: commentId }); // Elimina il documento commento
 
-    return { message: 'Commento eliminato con successo' }; // Restituisce un messaggio di successo
+    if (!commentDeleted) {
+        throw new Error('Commento non trovato');
+    }
+
+    return { message: 'Commento eliminato con successo' }; // Restituisce un messaggio di successo*/
 }
 
-const getListComments = async(id) => {
-    //return await commentSchema.find({_id}).populate('comments');
+const getCommentsByPostId = async (id) => {
+    //return await activitySchema.findById({id}).populate('comments');
+
+    const post = await activitySchema.findOne({ _id: id }).populate('comments'); // Popola i commenti per il post specificato
+
+    if (!post) {
+        throw new Error('Post non trovato');
+    }
+
+    return post.comments; // Restituisce la lista di commenti per il post specificato
 }
 
 /****************************************************** */
 
-const addCategories = async (content) => {
-    return await new activitySchema(content).save();
-}
 const likeNumbers = async (id, userId) => {
     const activity = await activityRepo.likes(id, userId);
     return checkActivity(activity);
 }
 
-
-
-const updateCategories = async (id, content) => {
-    return await activitySchema.findOneAndUpdate({ _id: id, userId: content.userId }, content, { new: true });
-}
 
 
 
@@ -131,14 +137,10 @@ export default {
     addComment,
     updateComments,
     removeComments,
-    getListComments,
+    getCommentsByPostId,
 
 
-    
 
-    addCategories,
+
     likeNumbers,
-    updateCategories,
-    
-
 }

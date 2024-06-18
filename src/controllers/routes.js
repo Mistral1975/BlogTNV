@@ -3,12 +3,6 @@
 import likeNumbers from "./likeNumbers.js";
 
 
-
-import addCategories from "./addCategories.js";
-import updateCategories from "./updateCategories.js";
-
-
-
 /******************************************** */
 
 import checkAuthorizationMiddleware from "../middleware/checkAuthorizationMiddleware.js";
@@ -31,18 +25,16 @@ import getPost from "./getPost.js";
 import addComment from "./addComment.js";
 import addCommentValidator from "../validators/addCommentValidator.js";
 import idCommentValidator from "../validators/idCommentValidator.js";
+import updateCommentsValidator from "../validators/updateCommentsValidator.js";
 import updateComments from "./updateComments.js";
 import removeComments from "./removeComments.js";
-import getListComments from "./getListComments.js";
+import getCommentsByPostId from "./getCommentsByPostId.js";
 
 
 const setup = app => {
-    app.post('/addcategories', checkAuthorizationMiddleware, addValidator, addCategories); //aggiungere categorie dei post
-    //app.get('/commentlist', checkAuthorizationMiddleware, commentList); //recuperare lista commenti
+
     app.get('/like', checkAuthorizationMiddleware, likeNumbers); //recuperare numero like
-    app.patch('/:updatecategories', checkAuthorizationMiddleware, updateValidator, updateCategories); //aggiorna categorie
-
-
+   
 
 
     
@@ -57,15 +49,15 @@ const setup = app => {
     app.post('/posts', checkAuthorizationMiddleware, addValidator, addPost); //aggiungere post
     app.patch('/posts/:id', checkAuthorizationMiddleware, updateValidator, updatePost); //aggiorna i post
     app.delete('/posts/:id', checkAuthorizationMiddleware, idParamValidator, removePost); //cancellazione post
-    app.get('/list', getList); //recuperare la lista di tutti i post del blog
+    app.get('/list', getList); //recuperare la lista di tutti i post del blog con i relativi commenti
     app.get('/posts/tags/:tags', tagsParamValidator, getListByTags);
     app.get('/:id', idParamValidator, getPost);
 
     /********** COMMENTI **********/
     app.post('/posts/:id/comments', checkAuthorizationMiddleware, addCommentValidator, addComment); //aggiungere commenti
-    app.patch('/posts/:id/comments/:commentId', checkAuthorizationMiddleware, updateValidator, updateComments); //aggiorna i commenti
-    //app.delete('/posts/:id/comments/:commentId', checkAuthorizationMiddleware, idCommentValidator, removeComments); //cancellazione commenti
-    //app.get('/posts/:id/comments', idParamValidator, getListComments); //recuperare lista commenti
+    app.patch('/posts/:id/comments/:commentId', checkAuthorizationMiddleware, updateCommentsValidator, updateComments); //aggiorna i commenti
+    app.delete('/posts/:id/comments/:commentId', checkAuthorizationMiddleware, idCommentValidator, removeComments); //cancellazione commenti
+    app.get('/posts/:id/comments', idParamValidator, getCommentsByPostId); //recuperare lista commenti
     
     app.use((err, req, res, next) => {
         if (err && err.error && err.error.isJoi) {
