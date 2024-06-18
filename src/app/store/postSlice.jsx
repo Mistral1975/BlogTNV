@@ -12,7 +12,7 @@ const postSlice = createSlice({
             console.log("sto caricando la postList su redux")
             state.postList = action.payload
         },
-        addToDo: (state, action) => {
+        addPost: (state, action) => {
             console.log("sto aggiungendo un post su redux");
             state.postList.push(action.payload)
         },

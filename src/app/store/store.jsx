@@ -13,7 +13,7 @@ const userPersistor = persistReducer(persistConfig, userReducer);
 
 export const store = configureStore({
     reducer: {
-        todo: postReducer,
+        post: postReducer,
         user: userPersistor
     },
 });
